@@ -2,7 +2,9 @@ package ua.edu.ukma.kataskin.smarthomeproject.api.controllers;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ua.edu.ukma.kataskin.smarthomeproject.api.exceptionsHandling.exceptions.ResourceNotFoundException;
 
@@ -11,6 +13,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+@Validated
 @RestController
 @RequestMapping("/api/v1/rooms")
 public class RoomController {
@@ -19,7 +22,9 @@ public class RoomController {
     private final AtomicLong seq = new AtomicLong(1);
 
     public record RoomDto(
-            @NotBlank String name,
+            @NotBlank(message = "name is required")
+            @Size(max = 50, message = "name must be <= 50 chars")
+            String name,
             String description,
             Set<String> deviceIds
     ) {}
