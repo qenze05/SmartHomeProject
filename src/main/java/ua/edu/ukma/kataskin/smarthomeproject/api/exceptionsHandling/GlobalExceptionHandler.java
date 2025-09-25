@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import ua.edu.ukma.kataskin.smarthomeproject.api.exceptionsHandling.exceptions.ForbiddenOperationException;
 import ua.edu.ukma.kataskin.smarthomeproject.api.exceptionsHandling.exceptions.ResourceNotFoundException;
+import ua.edu.ukma.kataskin.smarthomeproject.api.exceptionsHandling.exceptions.WeatherApiErrorException;
 
 import java.util.stream.Collectors;
 
@@ -20,6 +21,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ForbiddenOperationException.class)
     public ResponseEntity<String> handleForbiddenOperation(ForbiddenOperationException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(WeatherApiErrorException.class)
+    public ResponseEntity<String> handleWeatherApiErrorException(WeatherApiErrorException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.FORBIDDEN);
     }
 

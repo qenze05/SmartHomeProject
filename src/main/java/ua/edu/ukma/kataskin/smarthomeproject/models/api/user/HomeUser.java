@@ -11,4 +11,5 @@ public record HomeUser(
         UserRole role,
         @Size(min = 2, max = 32, message = "Device name must be 2 to 32 characters long")
         String name
-) { }
+) {
+}
