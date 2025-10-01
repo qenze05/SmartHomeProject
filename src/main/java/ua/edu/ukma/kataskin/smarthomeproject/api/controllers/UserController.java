@@ -2,6 +2,7 @@ package ua.edu.ukma.kataskin.smarthomeproject.api.controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ua.edu.ukma.kataskin.smarthomeproject.api.exceptionsHandling.exceptions.ForbiddenOperationException;
 import ua.edu.ukma.kataskin.smarthomeproject.api.exceptionsHandling.exceptions.ResourceNotFoundException;
@@ -11,6 +12,7 @@ import ua.edu.ukma.kataskin.smarthomeproject.models.api.user.UserRole;
 import java.net.URI;
 import java.util.*;
 
+@Validated
 @RestController
 @RequestMapping("/api/users")
 public class UserController {

@@ -2,6 +2,7 @@ package ua.edu.ukma.kataskin.smarthomeproject.api.controllers;
 
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ua.edu.ukma.kataskin.smarthomeproject.api.exceptionsHandling.exceptions.ResourceNotFoundException;
 import ua.edu.ukma.kataskin.smarthomeproject.api.exceptionsHandling.exceptions.WrongDeviceTypeException;
@@ -13,6 +14,7 @@ import ua.edu.ukma.kataskin.smarthomeproject.services.devices.AirConditionerServ
 import java.net.URI;
 import java.util.*;
 
+@Validated
 @RestController
 @RequestMapping("/api/devices")
 public class DeviceController {
