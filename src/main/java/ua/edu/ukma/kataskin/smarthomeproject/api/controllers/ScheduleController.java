@@ -3,6 +3,7 @@ package ua.edu.ukma.kataskin.smarthomeproject.api.controllers;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ua.edu.ukma.kataskin.smarthomeproject.api.exceptionsHandling.exceptions.ResourceNotFoundException;
 
@@ -13,6 +14,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
+@Validated
 @RestController
 @RequestMapping("/api/schedules")
 public class ScheduleController {
