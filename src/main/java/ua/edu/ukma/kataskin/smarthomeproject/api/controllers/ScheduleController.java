@@ -14,36 +14,22 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 
 @RestController
-@RequestMapping("/api/v1/schedules")
+@RequestMapping("/api/schedules")
 public class ScheduleController {
 
-    private final Map<Long, ScheduleDto> store = new ConcurrentHashMap<>();
-    private final AtomicLong seq = new AtomicLong(1);
+    private final Map<Long, ScheduleDto> store = new HashMap<>();
 
-    // куди застосовується розклад: кімната чи пристрій
     public enum TargetType { ROOM, DEVICE }
-
-    // яка дія виконується розкладом
     public enum Action { ON, OFF, TOGGLE }
 
     public record ScheduleDto(
             @NotNull TargetType targetType,
-            @NotBlank String targetId,            // id кімнати або пристрою
+            @NotBlank String targetId,
             @NotNull @Size(min = 1) Set<DayOfWeek> daysOfWeek,
             @NotNull LocalTime startTime,
             @NotNull LocalTime endTime,
             @NotNull Action action,
-            @NotBlank String timezone             // "Europe/Kyiv"
-    ) {}
-
-    public record SchedulePatchDto(
-            TargetType targetType,
-            String targetId,
-            Set<DayOfWeek> daysOfWeek,
-            LocalTime startTime,
-            LocalTime endTime,
-            Action action,
-            String timezone
+            @NotBlank String timezone
     ) {}
 
     public record ScheduleView(
@@ -70,39 +56,9 @@ public class ScheduleController {
         return toView(id, dto);
     }
 
-    @PostMapping
-    public ResponseEntity<ScheduleView> create(@Valid @RequestBody ScheduleDto dto) {
-        validateTimes(dto.startTime(), dto.endTime()); // проста валідація
-        long id = seq.getAndIncrement();
-        var normalized = normalize(dto);
-        store.put(id, normalized);
-        var body = toView(id, normalized);
-        return ResponseEntity.created(URI.create("/api/v1/schedules/" + id)).body(body);
-    }
-
     @PutMapping("/{id}")
     public ScheduleView put(@PathVariable Long id, @Valid @RequestBody ScheduleDto dto) {
         if (!store.containsKey(id)) throw new ResourceNotFoundException("Schedule %d not found".formatted(id));
-        validateTimes(dto.startTime(), dto.endTime());
-        var normalized = normalize(dto);
-        store.put(id, normalized);
-        return toView(id, normalized);
-    }
-
-    @PatchMapping("/{id}")
-    public ScheduleView patch(@PathVariable Long id, @RequestBody SchedulePatchDto patch) {
-        var current = store.get(id);
-        if (current == null) throw new ResourceNotFoundException("Schedule %d not found".formatted(id));
-
-        var dto = new ScheduleDto(
-                patch.targetType() != null ? patch.targetType() : current.targetType(),
-                patch.targetId() != null ? patch.targetId() : current.targetId(),
-                patch.daysOfWeek() != null ? new LinkedHashSet<>(patch.daysOfWeek()) : current.daysOfWeek(),
-                patch.startTime() != null ? patch.startTime() : current.startTime(),
-                patch.endTime() != null ? patch.endTime() : current.endTime(),
-                patch.action() != null ? patch.action() : current.action(),
-                patch.timezone() != null ? patch.timezone() : current.timezone()
-        );
         validateTimes(dto.startTime(), dto.endTime());
         var normalized = normalize(dto);
         store.put(id, normalized);
@@ -113,25 +69,6 @@ public class ScheduleController {
     public void delete(@PathVariable Long id) {
         if (store.remove(id) == null) throw new ResourceNotFoundException("Schedule %d not found".formatted(id));
     }
-
-//filters
-
-    @GetMapping("/by-room/{roomId}")
-    public List<ScheduleView> byRoom(@PathVariable String roomId) {
-        return store.entrySet().stream()
-                .filter(e -> e.getValue().targetType() == TargetType.ROOM && e.getValue().targetId().equals(roomId))
-                .map(e -> toView(e.getKey(), e.getValue()))
-                .toList();
-    }
-
-    @GetMapping("/by-device/{deviceId}")
-    public List<ScheduleView> byDevice(@PathVariable String deviceId) {
-        return store.entrySet().stream()
-                .filter(e -> e.getValue().targetType() == TargetType.DEVICE && e.getValue().targetId().equals(deviceId))
-                .map(e -> toView(e.getKey(), e.getValue()))
-                .toList();
-    }
-
 
     private static void validateTimes(LocalTime start, LocalTime end) {
 
