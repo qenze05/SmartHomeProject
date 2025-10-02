@@ -7,7 +7,9 @@ import java.util.UUID;
 
 public class Device {
     public UUID id;
+    @NotNull(message = "Device type must not be null, use UNSPECIFIED if type is unknown")
     public DeviceType deviceType;
+    @Size(min = 2, max = 32, message = "Device name must be 2 to 32 characters long")
     public String name;
 
     public Device(
