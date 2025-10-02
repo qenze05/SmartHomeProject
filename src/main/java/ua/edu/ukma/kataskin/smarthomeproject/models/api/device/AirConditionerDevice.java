@@ -13,9 +13,9 @@ public class AirConditionerDevice extends Device {
 
     public AirConditionerDevice(
             UUID id,
-            @NotNull(message = "Device type must not be null, use UNSPECIFIED if type is unknown")
+            @NotNull(message = Device.deviceTypeValidationMessage)
             DeviceType deviceType,
-            @Size(min = 2, max = 32, message = "Device name must be 2 to 32 characters long")
+            @Size(min = 2, max = 32, message = Device.deviceNameValidationMessage)
             String name
     ) {
         super(id, deviceType, name);

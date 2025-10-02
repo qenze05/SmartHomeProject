@@ -1,6 +1,7 @@
 package ua.edu.ukma.kataskin.smarthomeproject.api.controllers;
 
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -9,6 +10,7 @@ import ua.edu.ukma.kataskin.smarthomeproject.api.exceptionsHandling.exceptions.W
 import ua.edu.ukma.kataskin.smarthomeproject.models.api.device.AirConditionerDevice;
 import ua.edu.ukma.kataskin.smarthomeproject.models.api.device.Device;
 import ua.edu.ukma.kataskin.smarthomeproject.models.api.device.DeviceType;
+import ua.edu.ukma.kataskin.smarthomeproject.repository.devices.DeviceRepository;
 import ua.edu.ukma.kataskin.smarthomeproject.services.devices.AirConditionerService;
 
 import java.net.URI;
@@ -22,8 +24,11 @@ public class DeviceController {
 
     private final AirConditionerService airConditionerService;
 
-    public DeviceController(AirConditionerService airConditionerService) {
+    private final DeviceRepository deviceRepository;
+
+    public DeviceController(AirConditionerService airConditionerService, DeviceRepository deviceRepository) {
         this.airConditionerService = airConditionerService;
+        this.deviceRepository = deviceRepository;
     }
 
     @PostMapping
@@ -38,13 +43,13 @@ public class DeviceController {
             created = new Device(id, body.deviceType, body.name);
         }
 
-        store.put(id, created);
+        deviceRepository.save(created);
         return ResponseEntity.created(URI.create("/api/devices/" + id)).body(created);
     }
 
     @PostMapping("/{id}/air-conditioner/auto-adjust")
     public ResponseEntity<AirConditionerDevice> autoAdjust(@PathVariable UUID id) {
-        Device base = store.get(id);
+        Device base = deviceRepository.get(id);
 
         if (base == null) {
             throw new ResourceNotFoundException("Device %s not found".formatted(id));
@@ -55,19 +60,19 @@ public class DeviceController {
         }
 
         AirConditionerDevice updated = airConditionerService.autoAdjust(conditionerDevice);
-        store.put(id, updated);
+        deviceRepository.save(updated);
 
         return ResponseEntity.ok(updated);
     }
 
     @GetMapping
     public List<Device> list() {
-        return new ArrayList<>(store.values());
+        return deviceRepository.getAll();
     }
 
     @GetMapping("/{id}")
     public Device get(@PathVariable UUID id) {
-        Device dev = store.get(id);
+        Device dev = deviceRepository.get(id);
         if (dev == null) {
             throw new ResourceNotFoundException("Device %s not found".formatted(id));
         }
@@ -76,18 +81,18 @@ public class DeviceController {
 
     @PutMapping("/{id}")
     public Device update(@PathVariable UUID id, @Valid @RequestBody Device body) {
-        Device existing = store.get(id);
+        Device existing = deviceRepository.get(id);
         if (existing == null) {
             throw new ResourceNotFoundException("Device %s not found".formatted(id));
         }
         Device updated = new Device(id, body.deviceType, body.name);
-        store.put(id, updated);
+        deviceRepository.save(updated);
         return updated;
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        Device removed = store.remove(id);
+        Device removed = deviceRepository.delete(id);
         if (removed == null) {
             throw new ResourceNotFoundException("Device %s not found".formatted(id));
         }
