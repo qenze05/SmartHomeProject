@@ -5,12 +5,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ua.edu.ukma.kataskin.smarthomeproject.api.exceptionsHandling.exceptions.ResourceNotFoundException;
-import ua.edu.ukma.kataskin.smarthomeproject.api.exceptionsHandling.exceptions.WrongDeviceTypeException;
 import ua.edu.ukma.kataskin.smarthomeproject.models.api.device.AirConditionerDevice;
 import ua.edu.ukma.kataskin.smarthomeproject.models.api.device.Device;
-import ua.edu.ukma.kataskin.smarthomeproject.models.api.device.DeviceType;
 import ua.edu.ukma.kataskin.smarthomeproject.services.devices.DeviceControlService;
-import ua.edu.ukma.kataskin.smarthomeproject.services.devices.airConditioner.DefaultAirConditionerService;
 
 import java.net.URI;
 import java.util.*;

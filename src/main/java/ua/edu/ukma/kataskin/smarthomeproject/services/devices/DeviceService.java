@@ -1,5 +1,6 @@
 package ua.edu.ukma.kataskin.smarthomeproject.services.devices;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import ua.edu.ukma.kataskin.smarthomeproject.api.exceptionsHandling.exceptions.ResourceNotFoundException;
@@ -18,12 +19,12 @@ import java.util.UUID;
 public class DeviceService implements DeviceControlService {
 
     private final DeviceRepository deviceRepository;
-    private final DefaultAirConditionerService airConditionerService;
 
-    public DeviceService(DeviceRepository deviceRepository,
-                         DefaultAirConditionerService airConditionerService) {
+    @Autowired
+    private DefaultAirConditionerService airConditionerService;
+
+    public DeviceService(DeviceRepository deviceRepository) {
         this.deviceRepository = deviceRepository;
-        this.airConditionerService = airConditionerService;
     }
 
     @Override

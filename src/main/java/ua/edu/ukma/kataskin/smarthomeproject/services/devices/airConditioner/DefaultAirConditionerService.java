@@ -1,8 +1,10 @@
 package ua.edu.ukma.kataskin.smarthomeproject.services.devices.airConditioner;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import ua.edu.ukma.kataskin.smarthomeproject.models.api.device.AirConditionerDevice;
+import ua.edu.ukma.kataskin.smarthomeproject.services.devices.airConditioner.filterPolicy.FilterPolicy;
 import ua.edu.ukma.kataskin.smarthomeproject.services.weather.WeatherService;
 
 @Service
@@ -17,9 +19,15 @@ public class DefaultAirConditionerService implements AirConditionerService {
     private static final double MAX_HUMIDITY = 80.0;
 
     private final WeatherService weatherService;
+    private FilterPolicy filterPolicy;
 
     public DefaultAirConditionerService(WeatherService weatherService) {
         this.weatherService = weatherService;
+    }
+
+    @Autowired(required = false)
+    public void setFilterPolicy(FilterPolicy filterPolicy) {
+        this.filterPolicy = filterPolicy;
     }
 
     @Override
@@ -84,10 +92,11 @@ public class DefaultAirConditionerService implements AirConditionerService {
     }
 
     @Override
-    public boolean needsFilterOn(AirConditionerDevice device) {
-        validateDevice(device);
-        Double h = device.humidityPercent;
-        return h != null && h > 60.0;
+    public boolean needsFilterOn(AirConditionerDevice d) {
+        if (filterPolicy != null) {
+            return filterPolicy.needsFilterOn(d.humidityPercent);
+        }
+        return d.humidityPercent != null && d.humidityPercent > 60.0;
     }
 
     @Override
