@@ -1,9 +1,9 @@
 package ua.edu.ukma.kataskin.smarthomeproject.services.devices.airConditioner.filterPolicy;
 
 import org.springframework.context.annotation.Primary;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
-@Service
+@Component
 @Primary
 public class DefaultFilterPolicy implements FilterPolicy {
     @Override
