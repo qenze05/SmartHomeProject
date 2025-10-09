@@ -1,6 +1,7 @@
 package ua.edu.ukma.kataskin.smarthomeproject.repository.devices;
 
 import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 import ua.edu.ukma.kataskin.smarthomeproject.models.api.device.Device;
 import ua.edu.ukma.kataskin.smarthomeproject.models.api.device.DeviceType;
