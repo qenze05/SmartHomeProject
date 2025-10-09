@@ -6,7 +6,6 @@ import ua.edu.ukma.kataskin.smarthomeproject.models.api.device.Device;
 import ua.edu.ukma.kataskin.smarthomeproject.models.api.device.DeviceType;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
