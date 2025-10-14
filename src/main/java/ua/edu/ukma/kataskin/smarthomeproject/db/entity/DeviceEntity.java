@@ -7,7 +7,8 @@ import java.util.UUID;
 
 @Entity @Table(name = "devices")
 public class DeviceEntity {
-    @Id private UUID id;
+    @Id @GeneratedValue
+    private UUID id;
 
     @Column(nullable=false, length=120)
     private String name;
@@ -19,22 +20,13 @@ public class DeviceEntity {
     @ManyToOne(fetch = FetchType.LAZY) @JoinColumn(name="room_id")
     private RoomEntity room;
 
-    @ManyToMany
-    @JoinTable(name="device_tags",
-            joinColumns=@JoinColumn(name="device_id"),
-            inverseJoinColumns=@JoinColumn(name="tag_id"))
-    private Set<TagEntity> tags = new HashSet<>();
-
     public enum DeviceType { UNSPECIFIED, SECURITY, MEDIA, AIR_CONDITIONER, VACUUM_CLEANER, LIGHTS }
 
     protected DeviceEntity() {}
-    @PrePersist void gen() { if (id == null) id = UUID.randomUUID(); }
-
     public UUID getId() { return id; }
     public String getName() { return name; }
     public DeviceType getType() { return type; }
     public RoomEntity getRoom() { return room; }
-    public Set<TagEntity> getTags() { return tags; }
     public void setName(String n){ this.name=n; }
     public void setType(DeviceType t){ this.type=t; }
     public void setRoom(RoomEntity r){ this.room=r; }

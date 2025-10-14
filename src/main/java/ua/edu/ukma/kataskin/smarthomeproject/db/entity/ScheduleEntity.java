@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity @Table(name="schedules")
 public class ScheduleEntity {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long id;
 
     public enum TargetType { DEVICE, ROOM }
@@ -38,6 +38,4 @@ public class ScheduleEntity {
     private String timezone;
 
     protected ScheduleEntity() {}
-
-    // геттери/сеттери опущено для стислості (додай за потреби)
 }
