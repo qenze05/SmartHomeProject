@@ -19,10 +19,7 @@ import ua.edu.ukma.kataskin.smarthomeproject.dtos.api.device.DeviceDTO;
 import ua.edu.ukma.kataskin.smarthomeproject.dtos.api.device.DeviceType;
 import ua.edu.ukma.kataskin.smarthomeproject.services.devices.airConditioner.DefaultAirConditionerService;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Primary
@@ -60,6 +57,7 @@ public class DeviceService implements DeviceControlService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public AirConditionerDeviceDTO autoAdjustConditioner(UUID id) {
         Optional<DeviceEntity> entity = repo().findById(id);
         if (entity.isEmpty()) {
@@ -67,10 +65,6 @@ public class DeviceService implements DeviceControlService {
         }
 
         DeviceDTO base = deviceMapper.toDto(entity.get());
-
-        if (base == null) {
-            throw new ResourceNotFoundException("Device %s not found".formatted(id));
-        }
 
         if (!(base instanceof AirConditionerDeviceDTO conditionerDevice)) {
             throw new WrongDeviceTypeException("Device is not an air conditioner");
@@ -82,6 +76,7 @@ public class DeviceService implements DeviceControlService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public DeviceDTO updateDevice(UUID id, DeviceDTO updated) {
         DeviceDTO updatedDeviceDTO = new DeviceDTO(id, updated.deviceType, updated.name);
         repo().save(deviceMapper.toEntity(updatedDeviceDTO, roomRepository, groupRepository));
@@ -89,6 +84,7 @@ public class DeviceService implements DeviceControlService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public DeviceDTO createDevice(DeviceDTO deviceDTO) {
         UUID id = UUID.randomUUID();
         DeviceDTO created;
@@ -106,6 +102,7 @@ public class DeviceService implements DeviceControlService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public DeviceDTO getDeviceById(UUID id) {
         Optional<DeviceEntity> entity = repo().findById(id);
         if (entity.isEmpty()) {
@@ -124,9 +121,10 @@ public class DeviceService implements DeviceControlService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public DeviceDTO deleteDevice(UUID id) {
-        DeviceDTO dto = getDeviceById(id);
-        repo().deleteById(id);
-        return dto;
+        DeviceEntity entity = repo().findById(id).orElseThrow();
+        repo().delete(entity);
+        return deviceMapper.toDto(entity);
     }
 }
