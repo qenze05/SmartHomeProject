@@ -1,8 +1,12 @@
 package ua.edu.ukma.kataskin.smarthomeproject.services.devices;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ua.edu.ukma.kataskin.smarthomeproject.api.controllers.DeviceController;
 import ua.edu.ukma.kataskin.smarthomeproject.api.exceptionsHandling.exceptions.ResourceNotFoundException;
 import ua.edu.ukma.kataskin.smarthomeproject.api.exceptionsHandling.exceptions.WrongDeviceTypeException;
 import ua.edu.ukma.kataskin.smarthomeproject.db.entity.DeviceEntity;
@@ -23,6 +27,7 @@ import java.util.UUID;
 @Service
 @Primary
 public class DeviceService implements DeviceControlService {
+    private static final Logger log = LoggerFactory.getLogger(DeviceController.class);
 
     private final DeviceRepository deviceRepository;
     private final RoomRepository roomRepository;
@@ -96,6 +101,7 @@ public class DeviceService implements DeviceControlService {
         }
 
         repo().save(deviceMapper.toEntity(created, roomRepository, groupRepository));
+        if (created.deviceType == null) throw new IllegalArgumentException("deviceType required");
         return created;
     }
 
@@ -110,8 +116,10 @@ public class DeviceService implements DeviceControlService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<DeviceDTO> getAllDevices() {
         List<DeviceEntity> entities = repo().findAll();
+        log.info("GET /api/devices");
         return entities.stream().map(deviceMapper::toDto).toList();
     }
 

@@ -19,8 +19,8 @@ public class DeviceEntity {
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 40)
-    private DeviceType type;
+    @Column(name = "device_type", nullable = false)
+    private DeviceType deviceType;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
@@ -45,8 +45,8 @@ public class DeviceEntity {
         return name;
     }
 
-    public DeviceType getType() {
-        return type;
+    public DeviceType getDeviceType() {
+        return deviceType;
     }
 
     public RoomEntity getRoom() {
@@ -57,8 +57,8 @@ public class DeviceEntity {
         this.name = n;
     }
 
-    public void setType(DeviceType t) {
-        this.type = t;
+    public void setDeviceType(DeviceType t) {
+        this.deviceType = t;
     }
 
     public void setRoom(RoomEntity r) {

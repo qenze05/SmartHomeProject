@@ -11,6 +11,6 @@ import java.util.UUID;
 
 @Repository
 public interface DeviceRepository extends JpaRepository<DeviceEntity, UUID> {
-    List<DeviceEntity> findByType(DeviceType type);
+    List<DeviceEntity> findByDeviceType(DeviceType type);
     List<DeviceEntity> findByRoom_Id(Long roomId);
 }

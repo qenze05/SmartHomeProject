@@ -1,5 +1,7 @@
 package ua.edu.ukma.kataskin.smarthomeproject.api.controllers;
-
+import jakarta.transaction.Transactional;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -16,14 +18,15 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/devices")
 public class DeviceController {
+    private static final Logger log = LoggerFactory.getLogger(DeviceController.class);
     private final DeviceControlService deviceService;
 
     public DeviceController(DeviceControlService deviceControlService) {
         this.deviceService = deviceControlService;
     }
-
     @PostMapping
     public ResponseEntity<DeviceDTO> create(@Valid @RequestBody DeviceDTO body) {
+        System.out.println("CREATE DTO: type=" + body.deviceType + ", name=" + body.name);
         DeviceDTO created = deviceService.createDevice(body);
         return ResponseEntity.created(URI.create("/api/devices/" + created.id)).body(created);
     }
@@ -36,7 +39,10 @@ public class DeviceController {
 
     @GetMapping
     public List<DeviceDTO> list() {
-        return deviceService.getAllDevices();
+        log.info("GET /api/devices");
+        List<DeviceDTO> items = deviceService.getAllDevices();
+        log.info("GET /api/devices → {} item(s)", items.size());
+        return items;
     }
 
     @GetMapping("/{id}")

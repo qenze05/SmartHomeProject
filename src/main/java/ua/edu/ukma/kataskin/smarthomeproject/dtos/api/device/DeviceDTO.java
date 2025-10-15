@@ -18,6 +18,7 @@ public class DeviceDTO {
     public String roomId;
     public List<String> groupIds;
 
+    public DeviceDTO() { }
     public DeviceDTO(
             UUID id,
             @NotNull(message = deviceTypeValidationMessage)

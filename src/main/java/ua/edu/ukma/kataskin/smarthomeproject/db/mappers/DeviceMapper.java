@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 public interface DeviceMapper {
 
     @Mappings({
-            @Mapping(source = "type", target = "deviceType"),
+            @Mapping(source = "deviceType", target = "deviceType"),
             @Mapping(source = "room.id", target = "roomId", qualifiedByName = "longToString"),
             @Mapping(source = "groups", target = "groupIds", qualifiedByName = "groupsToStringIds")
     })
@@ -23,6 +23,7 @@ public interface DeviceMapper {
     List<DeviceDTO> toDtoList(List<DeviceEntity> entities);
 
     @Mappings({
+            @Mapping(target = "deviceType", source = "deviceType", defaultValue = "UNSPECIFIED"),
             @Mapping(target = "room", ignore = true),
             @Mapping(target = "groups", ignore = true)
     })
@@ -59,7 +60,7 @@ public interface DeviceMapper {
     }
 
     @Named("longToString")
-    default String longToString(Long id) {
+    default String longToString(Object id) {
         return id == null ? null : id.toString();
     }
 
