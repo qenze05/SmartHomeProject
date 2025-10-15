@@ -1,19 +1,19 @@
 package ua.edu.ukma.kataskin.smarthomeproject.services.devices.airConditioner;
 
-import ua.edu.ukma.kataskin.smarthomeproject.models.api.device.AirConditionerDevice;
+import ua.edu.ukma.kataskin.smarthomeproject.dtos.api.device.AirConditionerDeviceDTO;
 
 public interface AirConditionerService {
 
-    AirConditionerDevice autoAdjust(AirConditionerDevice device);
+    AirConditionerDeviceDTO autoAdjust(AirConditionerDeviceDTO device);
 
-    AirConditionerDevice setTargetTemperature(AirConditionerDevice device, double celsius);
-    AirConditionerDevice increaseTemperature(AirConditionerDevice device, double stepCelsius);
-    AirConditionerDevice decreaseTemperature(AirConditionerDevice device, double stepCelsius);
+    AirConditionerDeviceDTO setTargetTemperature(AirConditionerDeviceDTO device, double celsius);
+    AirConditionerDeviceDTO increaseTemperature(AirConditionerDeviceDTO device, double stepCelsius);
+    AirConditionerDeviceDTO decreaseTemperature(AirConditionerDeviceDTO device, double stepCelsius);
 
-    AirConditionerDevice setTargetHumidity(AirConditionerDevice device, Double humidityPercent);
+    AirConditionerDeviceDTO setTargetHumidity(AirConditionerDeviceDTO device, Double humidityPercent);
 
-    AirConditionerDevice setPowerPercent(AirConditionerDevice device, double percent);
+    AirConditionerDeviceDTO setPowerPercent(AirConditionerDeviceDTO device, double percent);
 
-    boolean needsFilterOn(AirConditionerDevice device);
-    AirConditionerDevice setFilterOn(AirConditionerDevice device, boolean on);
+    boolean needsFilterOn(AirConditionerDeviceDTO device);
+    AirConditionerDeviceDTO setFilterOn(AirConditionerDeviceDTO device, boolean on);
 }

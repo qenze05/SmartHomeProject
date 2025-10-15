@@ -1,4 +1,4 @@
-package ua.edu.ukma.kataskin.smarthomeproject.db.repo;
+package ua.edu.ukma.kataskin.smarthomeproject.db.repository.schedule;
 import org.springframework.data.jpa.repository.JpaRepository;
 import ua.edu.ukma.kataskin.smarthomeproject.db.entity.ScheduleEntity;
 import java.util.List;

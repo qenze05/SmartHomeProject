@@ -6,8 +6,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ua.edu.ukma.kataskin.smarthomeproject.api.exceptionsHandling.exceptions.ForbiddenOperationException;
 import ua.edu.ukma.kataskin.smarthomeproject.api.exceptionsHandling.exceptions.ResourceNotFoundException;
-import ua.edu.ukma.kataskin.smarthomeproject.models.api.user.HomeUser;
-import ua.edu.ukma.kataskin.smarthomeproject.models.api.user.UserRole;
+import ua.edu.ukma.kataskin.smarthomeproject.dtos.api.user.HomeUser;
+import ua.edu.ukma.kataskin.smarthomeproject.dtos.api.user.UserRole;
 
 import java.net.URI;
 import java.util.*;

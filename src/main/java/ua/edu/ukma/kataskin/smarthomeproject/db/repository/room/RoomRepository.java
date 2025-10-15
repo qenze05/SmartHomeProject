@@ -1,4 +1,4 @@
-package ua.edu.ukma.kataskin.smarthomeproject.db.repo;
+package ua.edu.ukma.kataskin.smarthomeproject.db.repository.room;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import ua.edu.ukma.kataskin.smarthomeproject.db.entity.RoomEntity;

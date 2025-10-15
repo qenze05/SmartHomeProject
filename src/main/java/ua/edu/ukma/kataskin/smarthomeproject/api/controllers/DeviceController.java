@@ -5,8 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ua.edu.ukma.kataskin.smarthomeproject.api.exceptionsHandling.exceptions.ResourceNotFoundException;
-import ua.edu.ukma.kataskin.smarthomeproject.models.api.device.AirConditionerDevice;
-import ua.edu.ukma.kataskin.smarthomeproject.models.api.device.Device;
+import ua.edu.ukma.kataskin.smarthomeproject.dtos.api.device.AirConditionerDeviceDTO;
+import ua.edu.ukma.kataskin.smarthomeproject.dtos.api.device.DeviceDTO;
 import ua.edu.ukma.kataskin.smarthomeproject.services.devices.DeviceControlService;
 
 import java.net.URI;
@@ -23,25 +23,25 @@ public class DeviceController {
     }
 
     @PostMapping
-    public ResponseEntity<Device> create(@Valid @RequestBody Device body) {
-        Device created = deviceService.createDevice(body);
+    public ResponseEntity<DeviceDTO> create(@Valid @RequestBody DeviceDTO body) {
+        DeviceDTO created = deviceService.createDevice(body);
         return ResponseEntity.created(URI.create("/api/devices/" + created.id)).body(created);
     }
 
     @PostMapping("/{id}/air-conditioner/auto-adjust")
-    public ResponseEntity<AirConditionerDevice> autoAdjust(@PathVariable UUID id) {
-        AirConditionerDevice updated = deviceService.autoAdjustConditioner(id);
+    public ResponseEntity<AirConditionerDeviceDTO> autoAdjust(@PathVariable UUID id) {
+        AirConditionerDeviceDTO updated = deviceService.autoAdjustConditioner(id);
         return ResponseEntity.ok(updated);
     }
 
     @GetMapping
-    public List<Device> list() {
-        return deviceService.repo().getAll();
+    public List<DeviceDTO> list() {
+        return deviceService.getAllDevices();
     }
 
     @GetMapping("/{id}")
-    public Device get(@PathVariable UUID id) {
-        Device dev = deviceService.repo().get(id);
+    public DeviceDTO get(@PathVariable UUID id) {
+        DeviceDTO dev = deviceService.getDeviceById(id);
         if (dev == null) {
             throw new ResourceNotFoundException("Device %s not found".formatted(id));
         }
@@ -49,8 +49,8 @@ public class DeviceController {
     }
 
     @PutMapping("/{id}")
-    public Device update(@PathVariable UUID id, @Valid @RequestBody Device body) {
-        Device existing = deviceService.repo().get(id);
+    public DeviceDTO update(@PathVariable UUID id, @Valid @RequestBody DeviceDTO body) {
+        DeviceDTO existing = deviceService.getDeviceById(id);
         if (existing == null) {
             throw new ResourceNotFoundException("Device %s not found".formatted(id));
         }
@@ -59,7 +59,7 @@ public class DeviceController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
-        Device removed = deviceService.repo().delete(id);
+        DeviceDTO removed = deviceService.deleteDevice(id);
         if (removed == null) {
             throw new ResourceNotFoundException("Device %s not found".formatted(id));
         }

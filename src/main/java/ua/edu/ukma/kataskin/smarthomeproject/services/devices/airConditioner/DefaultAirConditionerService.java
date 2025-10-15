@@ -3,7 +3,7 @@ package ua.edu.ukma.kataskin.smarthomeproject.services.devices.airConditioner;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
-import ua.edu.ukma.kataskin.smarthomeproject.models.api.device.AirConditionerDevice;
+import ua.edu.ukma.kataskin.smarthomeproject.dtos.api.device.AirConditionerDeviceDTO;
 import ua.edu.ukma.kataskin.smarthomeproject.services.devices.airConditioner.filterPolicy.FilterPolicy;
 import ua.edu.ukma.kataskin.smarthomeproject.services.weather.WeatherService;
 
@@ -31,7 +31,7 @@ public class DefaultAirConditionerService implements AirConditionerService {
     }
 
     @Override
-    public AirConditionerDevice autoAdjust(AirConditionerDevice device) {
+    public AirConditionerDeviceDTO autoAdjust(AirConditionerDeviceDTO device) {
         validateDevice(device);
 
         double outdoor = weatherService.getCurrentWeather().main.temp;
@@ -49,14 +49,14 @@ public class DefaultAirConditionerService implements AirConditionerService {
     }
 
     @Override
-    public AirConditionerDevice setTargetTemperature(AirConditionerDevice device, double celsius) {
+    public AirConditionerDeviceDTO setTargetTemperature(AirConditionerDeviceDTO device, double celsius) {
         validateDevice(device);
         device.temperature = clamp(celsius, MIN_TEMP, MAX_TEMP);
         return device;
     }
 
     @Override
-    public AirConditionerDevice increaseTemperature(AirConditionerDevice device, double stepCelsius) {
+    public AirConditionerDeviceDTO increaseTemperature(AirConditionerDeviceDTO device, double stepCelsius) {
         validateDevice(device);
         double next = device.temperature + Math.max(0.1, stepCelsius);
         device.temperature = clamp(next, MIN_TEMP, MAX_TEMP);
@@ -64,7 +64,7 @@ public class DefaultAirConditionerService implements AirConditionerService {
     }
 
     @Override
-    public AirConditionerDevice decreaseTemperature(AirConditionerDevice device, double stepCelsius) {
+    public AirConditionerDeviceDTO decreaseTemperature(AirConditionerDeviceDTO device, double stepCelsius) {
         validateDevice(device);
         double next = device.temperature - Math.max(0.1, stepCelsius);
         device.temperature = clamp(next, MIN_TEMP, MAX_TEMP);
@@ -72,7 +72,7 @@ public class DefaultAirConditionerService implements AirConditionerService {
     }
 
     @Override
-    public AirConditionerDevice setTargetHumidity(AirConditionerDevice device, Double humidityPercent) {
+    public AirConditionerDeviceDTO setTargetHumidity(AirConditionerDeviceDTO device, Double humidityPercent) {
         validateDevice(device);
         if (humidityPercent == null) {
             device.humidityPercent = null;
@@ -85,14 +85,14 @@ public class DefaultAirConditionerService implements AirConditionerService {
     }
 
     @Override
-    public AirConditionerDevice setPowerPercent(AirConditionerDevice device, double percent) {
+    public AirConditionerDeviceDTO setPowerPercent(AirConditionerDeviceDTO device, double percent) {
         validateDevice(device);
         device.powerPercent = clamp(percent, MIN_POWER, MAX_POWER);
         return device;
     }
 
     @Override
-    public boolean needsFilterOn(AirConditionerDevice d) {
+    public boolean needsFilterOn(AirConditionerDeviceDTO d) {
         if (filterPolicy != null) {
             return filterPolicy.needsFilterOn(d.humidityPercent);
         }
@@ -100,13 +100,13 @@ public class DefaultAirConditionerService implements AirConditionerService {
     }
 
     @Override
-    public AirConditionerDevice setFilterOn(AirConditionerDevice device, boolean on) {
+    public AirConditionerDeviceDTO setFilterOn(AirConditionerDeviceDTO device, boolean on) {
         validateDevice(device);
         device.filterIsOn = on;
         return device;
     }
 
-    private void validateDevice(AirConditionerDevice device) {
+    private void validateDevice(AirConditionerDeviceDTO device) {
         if (device == null) {
             throw new IllegalArgumentException("AirConditionerDevice must not be null");
         }

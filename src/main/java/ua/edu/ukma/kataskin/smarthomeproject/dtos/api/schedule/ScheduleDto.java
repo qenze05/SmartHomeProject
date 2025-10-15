@@ -1,4 +1,4 @@
-package ua.edu.ukma.kataskin.smarthomeproject.api.dto;
+package ua.edu.ukma.kataskin.smarthomeproject.dtos.api.schedule;
 import java.time.*; import java.util.*;
 public record ScheduleDto(
         Long id, String targetType, Long roomId, java.util.UUID deviceId,

@@ -1,4 +1,4 @@
-package ua.edu.ukma.kataskin.smarthomeproject.models.api.user;
+package ua.edu.ukma.kataskin.smarthomeproject.dtos.api.user;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
