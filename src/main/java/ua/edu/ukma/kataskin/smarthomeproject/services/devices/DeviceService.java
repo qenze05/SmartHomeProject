@@ -124,9 +124,25 @@ public class DeviceService implements DeviceControlService {
     }
 
     @Override
+    @Transactional
     public DeviceDTO deleteDevice(UUID id) {
-        DeviceDTO dto = getDeviceById(id);
-        repo().deleteById(id);
-        return dto;
-    }
-}
+        log.info("Deleting device with id={}", id);
+        try {
+            var entity = deviceRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Device %s not found".formatted(id)));
+
+            DeviceDTO dto = deviceMapper.toDto(entity);
+
+            deviceRepository.delete(entity);
+            deviceRepository.flush();
+            return dto;
+
+        } catch (ResourceNotFoundException ex) {
+            log.warn("Delete failed: device {} not found", id);
+            throw ex;
+
+        } catch (Exception ex) {
+            log.error("Unexpected error while deleting device {}: {}", id, ex.getMessage(), ex);
+            throw ex;
+        }
+    }}

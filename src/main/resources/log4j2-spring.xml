@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="10" packages="ua.edu.ukma.kataskin.smarthomeproject.logging">
+    <Appenders>
+        <Console name="ConsoleJSON" target="SYSTEM_OUT">
+            <PrettyJsonLayout charset="UTF-8"/>
+        </Console>
+
+        <CustomFileAppender name="CustomFile" fileName="logs/audit.json" append="true">
+            <PrettyJsonLayout charset="UTF-8"/>
+        </CustomFileAppender>
+
+        <File name="StdFile" fileName="logs/app.log" append="true">
+            <PrettyJsonLayout charset="UTF-8"/>
+        </File>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="ua.edu.ukma.kataskin.smarthomeproject" level="info" additivity="false">
+            <AppenderRef ref="ConsoleJSON"/>
+            <AppenderRef ref="CustomFile"/>
+        </Logger>
+
+        <Root level="info">
+            <AppenderRef ref="ConsoleJSON"/>
+            <AppenderRef ref="StdFile"/>
+        </Root>
+    </Loggers>
+</Configuration>
