@@ -1,0 +1,20 @@
+templates:
+  - name: night-mode
+    deviceType: LIGHT
+    props:
+      brightness: 20
+      colorTemperature: 2700
+      transitionMs: 800
+
+  - name: reading
+    deviceType: LIGHT
+    props:
+      brightness: 75
+      colorTemperature: 4000
+
+  - name: eco-thermostat
+    deviceType: THERMOSTAT
+    props:
+      minTempC: 18
+      maxTempC: 21
+      hysteresis: 0.5
