@@ -2,6 +2,7 @@ plugins {
     java
     id("org.springframework.boot") version "3.5.6"
     id("io.spring.dependency-management") version "1.1.7"
+    id("org.springdoc.openapi-gradle-plugin") version "1.9.0"
 }
 
 group = "ua.edu.ukma.kataskin"
@@ -23,6 +24,7 @@ dependencies {
     implementation("ua.edu.ukma.kataskin:device-templates-starter:0.1.0")
     // implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.springframework.boot:spring-boot-starter-log4j2")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.13")
     implementation("org.springframework.boot:spring-boot-starter-validation") {
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
     }

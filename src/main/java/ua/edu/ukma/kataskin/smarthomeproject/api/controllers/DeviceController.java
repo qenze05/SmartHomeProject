@@ -1,4 +1,5 @@
 package ua.edu.ukma.kataskin.smarthomeproject.api.controllers;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import java.net.URI;
 import java.util.*;
 
 @Validated
+@Tag(name = "Devices", description = "Operations for managing devices")
 @RestController
 @RequestMapping("/api/devices")
 public class DeviceController {

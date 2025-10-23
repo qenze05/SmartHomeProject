@@ -1,5 +1,6 @@
 package ua.edu.ukma.kataskin.smarthomeproject.services.weather;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -8,6 +9,7 @@ import ua.edu.ukma.kataskin.smarthomeproject.config.WeatherConfig;
 
 @Service
 @Primary
+@ConditionalOnProperty(prefix = "openweathermap", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class DefaultWeatherService implements WeatherService {
 
     private final RestTemplate restTemplate;
