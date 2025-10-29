@@ -34,7 +34,8 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa") {
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
     }
-    runtimeOnly("com.h2database:h2")
+    implementation("org.xerial:sqlite-jdbc:3.46.0.0")
+    implementation("org.hibernate.orm:hibernate-community-dialects")
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.springframework.boot", module = "spring-boot-starter-logging")
     }
