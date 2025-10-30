@@ -57,7 +57,7 @@ public class DeviceService implements DeviceControlService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public AirConditionerDeviceDTO autoAdjustConditioner(UUID id) {
         Optional<DeviceEntity> entity = repo().findById(id);
         if (entity.isEmpty()) {
@@ -76,7 +76,7 @@ public class DeviceService implements DeviceControlService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public DeviceDTO updateDevice(UUID id, DeviceDTO updated) {
         DeviceDTO updatedDeviceDTO = new DeviceDTO(id, updated.deviceType, updated.name);
         repo().save(deviceMapper.toEntity(updatedDeviceDTO, roomRepository, groupRepository));
@@ -84,7 +84,7 @@ public class DeviceService implements DeviceControlService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public DeviceDTO createDevice(DeviceDTO deviceDTO) {
         UUID id = UUID.randomUUID();
         DeviceDTO created;
@@ -121,7 +121,7 @@ public class DeviceService implements DeviceControlService {
     }
 
     @Override
-    @Transactional(readOnly = true)
+    @Transactional
     public DeviceDTO deleteDevice(UUID id) {
         DeviceEntity entity = repo().findById(id).orElseThrow();
         repo().delete(entity);
