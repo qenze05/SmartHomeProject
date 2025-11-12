@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="uk">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="${isEdit} ? 'Редагувати пристрій' : 'Новий пристрій'">Пристрій</title>
+    <link th:href="@{/css/app.css}" rel="stylesheet"/>
+</head>
+<body>
+<header class="topbar">
+    <img th:src="@{/img/logo.svg}" alt="Logo" class="logo"/>
+    <nav>
+        <a th:href="@{/}">Пристрої</a>
+        <a th:href="@{/users}">Користувачі</a>
+        <form th:action="@{/logout}" method="post" style="display:inline">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button type="submit" class="linklike">Вийти</button>
+        </form>
+    </nav>
+</header>
+
+<main>
+    <h1 th:text="${isEdit} ? 'Редагування пристрою' : 'Створення пристрою'">Форма</h1>
+
+    <div sec:authorize="hasRole('GUEST')" class="alert">
+        У вас немає прав для цієї дії.
+    </div>
+
+    <form sec:authorize="hasAnyRole('OWNER','FAMILY_MEMBER')"
+          th:with="actionUrl=${isEdit} ? @{/devices/{id}(id=${device.id})} : @{/devices}"
+          th:action="${actionUrl}"
+          method="post"
+          th:object="${device}">
+
+
+        <label>Назва
+            <input type="text" th:field="*{name}" required minlength="2" maxlength="32"/>
+        </label>
+        <div class="error" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">Помилка</div>
+
+        <label>Тип
+            <select th:field="*{deviceType}">
+                <option th:each="t : ${T(ua.edu.ukma.kataskin.smarthomeproject.dtos.api.device.DeviceType).values()}"
+                        th:value="${t}" th:text="${t}">UNSPECIFIED
+                </option>
+            </select>
+        </label>
+        <div class="error" th:if="${#fields.hasErrors('deviceType')}" th:errors="*{deviceType}">Помилка</div>
+
+        <div class="actions">
+            <button type="submit" class="btn">Зберегти</button>
+            <a class="btn secondary" th:href="@{/}">Скасувати</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

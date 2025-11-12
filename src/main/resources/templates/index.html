@@ -1,21 +1,62 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="uk">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      lang="uk">
 <head>
     <meta charset="UTF-8"/>
-    <title th:text="${usernameTitle}">Smart Home</title>
+    <title>Пристрої</title>
     <link th:href="@{/css/app.css}" rel="stylesheet"/>
 </head>
 <body>
-<header>
+<header class="topbar">
+    <img th:src="@{/img/logo.svg}" alt="Logo" class="logo"/>
     <nav>
-        <a th:href="@{/}">Головна</a>
-        <a th:href="@{/logout}">Вийти</a>
+        <a th:href="@{/}">Пристрої</a>
+        <a th:href="@{/users}">Користувачі</a>
+        <form th:action="@{/logout}" method="post" style="display:inline">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+            <button type="submit" class="linklike">Вийти</button>
+        </form>
     </nav>
 </header>
 
 <main>
-    <h2>Вітаю! Ви успішно увійшли.</h2>
-    <p>Це захищена сторінка (formLogin + сесія).</p>
+    <h1>Список пристроїв</h1>
+
+    <div class="actions">
+        <a class="btn"
+           sec:authorize="hasAnyRole('OWNER','FAMILY_MEMBER')"
+           th:href="@{/devices/new}">
+            Додати пристрій
+        </a>
+    </div>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Назва</th>
+            <th>Тип</th>
+            <th class="right">Дії</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="d : ${devices}">
+            <td th:text="${d.name}">Назва</td>
+            <td th:text="${d.deviceType}">Тип</td>
+            <td class="right">
+                <a class="link"
+                   sec:authorize="hasAnyRole('OWNER','FAMILY_MEMBER')"
+                   th:href="@{|/devices/${d.id}/edit|}">Редагувати</a>
+
+                <form th:action="@{|/devices/${d.id}/delete|}" method="post"
+                      sec:authorize="hasAnyRole('OWNER','FAMILY_MEMBER')"
+                      style="display:inline">
+                    <button class="link danger" type="submit">Видалити</button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 </main>
 </body>
 </html>

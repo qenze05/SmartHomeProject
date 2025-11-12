@@ -37,14 +37,14 @@ public class SecurityConfig {
                                 "/api/auth/**"
                         ).permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/api/devices/**").hasAnyRole("USER", "ADMIN")
-                        .requestMatchers(HttpMethod.POST, "/api/devices/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/api/devices/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/api/devices/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/api/devices/**").hasAnyRole("GUEST", "FAMILY_MEMBER")
+                        .requestMatchers(HttpMethod.POST, "/api/devices/**").hasRole("FAMILY_MEMBER")
+                        .requestMatchers(HttpMethod.PUT, "/api/devices/**").hasRole("FAMILY_MEMBER")
+                        .requestMatchers(HttpMethod.DELETE, "/api/devices/**").hasRole("FAMILY_MEMBER")
 
                         .requestMatchers(HttpMethod.GET, "/api/users/**").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/api/users/**").hasAnyRole("ADMIN", "OWNER")
-                        .requestMatchers(HttpMethod.PUT, "/api/users/**").hasAnyRole("ADMIN", "OWNER")
+                        .requestMatchers(HttpMethod.POST, "/api/users/**").hasAnyRole("FAMILY_MEMBER", "OWNER")
+                        .requestMatchers(HttpMethod.PUT, "/api/users/**").hasAnyRole("FAMILY_MEMBER", "OWNER")
                         .requestMatchers(HttpMethod.DELETE, "/api/users/**").hasRole("OWNER")
                         .anyRequest().authenticated()
                 )

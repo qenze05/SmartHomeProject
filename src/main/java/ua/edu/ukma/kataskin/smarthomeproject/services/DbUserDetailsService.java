@@ -20,10 +20,10 @@ public class DbUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         var u = users.findByNameIgnoreCase(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
-        
+
         return User.withUsername(u.getName())
                 .password(u.getPasswordHash())
-                .roles("USER")
+                .roles(u.getRole().name())
                 .build();
     }
 }
