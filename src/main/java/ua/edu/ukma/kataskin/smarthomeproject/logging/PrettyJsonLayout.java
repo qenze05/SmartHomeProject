@@ -1,5 +1,6 @@
 package ua.edu.ukma.kataskin.smarthomeproject.logging;
 
+import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.layout.AbstractStringLayout;
@@ -29,7 +30,7 @@ public class PrettyJsonLayout extends AbstractStringLayout {
     public String toSerializable(LogEvent event) {
         String ts = Instant.ofEpochMilli(event.getTimeMillis()).toString();
         String marker = event.getMarker() != null ? event.getMarker().getName() : null;
-
+        ThreadContext.clearAll();
         StringJoiner mdcPairs = new StringJoiner(",", "{", "}");
         for (Map.Entry<String, String> e : event.getContextData().toMap().entrySet()) {
             mdcPairs.add(jsonKV(e.getKey(), e.getValue()));
@@ -60,13 +61,14 @@ public class PrettyJsonLayout extends AbstractStringLayout {
     }
 
     private static String jsonKV(String k, String v) {
-        return "\"" + escape(k) + "\":\"" + escape(v) + "\"";
+        ThreadContext.put(k, v);
+        return "\"" + ThreadContext.get(k) + "\"";
     }
 
-    private static String escape(String s) {
-        if (s == null) return "";
-        return s.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n");
-    }
+//    private static String escape(String s) {
+//        if (s == null) return "";
+//        return s.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n");
+//    }
 
     @Override
     public String getContentType() {

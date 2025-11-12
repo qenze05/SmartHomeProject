@@ -31,4 +31,3 @@ public class DefaultWeatherService implements WeatherService {
         return res;
     }
 }
-
