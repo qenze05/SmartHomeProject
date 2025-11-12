@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="uk">
+<head>
+    <meta charset="UTF-8"/>
+    <title th:text="${usernameTitle}">Smart Home</title>
+    <link th:href="@{/css/app.css}" rel="stylesheet"/>
+</head>
+<body>
+<header>
+    <nav>
+        <a th:href="@{/}">Головна</a>
+        <a th:href="@{/logout}">Вийти</a>
+    </nav>
+</header>
+
+<main>
+    <h2>Вітаю! Ви успішно увійшли.</h2>
+    <p>Це захищена сторінка (formLogin + сесія).</p>
+</main>
+</body>
+</html>
