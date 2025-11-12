@@ -14,7 +14,7 @@ import java.util.StringJoiner;
 @Plugin(name = "PrettyJsonLayout", category = "Core", elementType = Layout.ELEMENT_TYPE, printObject = true)
 public class PrettyJsonLayout extends AbstractStringLayout {
 
-    protected PrettyJsonLayout(Charset charset) {
+    public PrettyJsonLayout(Charset charset) {
         super(charset);
     }
 
@@ -30,16 +30,15 @@ public class PrettyJsonLayout extends AbstractStringLayout {
         String ts = Instant.ofEpochMilli(event.getTimeMillis()).toString();
         String marker = event.getMarker() != null ? event.getMarker().getName() : null;
 
-        // ThreadContext (MDC) як JSON
         StringJoiner mdcPairs = new StringJoiner(",", "{", "}");
         for (Map.Entry<String, String> e : event.getContextData().toMap().entrySet()) {
             mdcPairs.add(jsonKV(e.getKey(), e.getValue()));
         }
-        if (mdcPairs.length() == 2) mdcPairs = new StringJoiner("", "", ""); // порожній {}
+        if (mdcPairs.length() == 2) mdcPairs = new StringJoiner("", "", "");
 
         StringBuilder sb = new StringBuilder(256);
         sb.append("{")
-                .append(jsonKV("ts", ts)).append(",")
+                .append(jsonKV("date", ts)).append(",")
                 .append(jsonKV("level", event.getLevel().name())).append(",")
                 .append(jsonKV("thread", event.getThreadName())).append(",")
                 .append(jsonKV("logger", event.getLoggerName())).append(",");

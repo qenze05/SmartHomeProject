@@ -20,7 +20,7 @@ import java.util.*;
 @RestController
 @RequestMapping("/api/devices")
 public class DeviceController {
-    private static final Logger log = LoggerFactory.getLogger(DeviceController.class);
+    private static Logger log = LoggerFactory.getLogger(DeviceController.class);
     private final DeviceControlService deviceService;
 
     public DeviceController(DeviceControlService deviceControlService) {
@@ -28,20 +28,21 @@ public class DeviceController {
     }
     @PostMapping
     public ResponseEntity<DeviceDTO> create(@Valid @RequestBody DeviceDTO body) {
-        System.out.println("CREATE DTO: type=" + body.deviceType + ", name=" + body.name);
+        log.info("Create DTO: type={}, name={}", body.deviceType, body.name);
         DeviceDTO created = deviceService.createDevice(body);
         return ResponseEntity.created(URI.create("/api/devices/" + created.id)).body(created);
     }
 
     @PostMapping("/{id}/air-conditioner/auto-adjust")
     public ResponseEntity<AirConditionerDeviceDTO> autoAdjust(@PathVariable UUID id) {
+        log.info("Air Conditioner auto-adjusted");
         AirConditionerDeviceDTO updated = deviceService.autoAdjustConditioner(id);
         return ResponseEntity.ok(updated);
     }
 
     @GetMapping
     public List<DeviceDTO> list() {
-        log.info("GET /api/devices");
+        log.info("Trying to GET /api/devices");
         List<DeviceDTO> items = deviceService.getAllDevices();
         log.info("GET /api/devices → {} item(s)", items.size());
         return items;
@@ -51,8 +52,10 @@ public class DeviceController {
     public DeviceDTO get(@PathVariable UUID id) {
         DeviceDTO dev = deviceService.getDeviceById(id);
         if (dev == null) {
+            log.error("GET failed. Device {} not found", id);
             throw new ResourceNotFoundException("Device %s not found".formatted(id));
         }
+        log.info("GET device {}.", id);
         return dev;
     }
 
@@ -60,8 +63,10 @@ public class DeviceController {
     public DeviceDTO update(@PathVariable UUID id, @Valid @RequestBody DeviceDTO body) {
         DeviceDTO existing = deviceService.getDeviceById(id);
         if (existing == null) {
+            log.error("PUT failed. Device {} not found", id);
             throw new ResourceNotFoundException("Device %s not found".formatted(id));
         }
+        log.info("Device {} updated.", id);
         return deviceService.updateDevice(id, body);
     }
 
@@ -69,8 +74,10 @@ public class DeviceController {
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         DeviceDTO removed = deviceService.deleteDevice(id);
         if (removed == null) {
+            log.error("DELETE failed. Device {} not found", id);
             throw new ResourceNotFoundException("Device %s not found".formatted(id));
         }
+        log.info("Device {} deleted.", id);
         return ResponseEntity.noContent().build();
     }
 }

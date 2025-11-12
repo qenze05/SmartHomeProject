@@ -3,6 +3,8 @@ package ua.edu.ukma.kataskin.smarthomeproject.api.controllers;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,7 @@ import java.util.concurrent.atomic.AtomicLong;
 public class RoomController {
 
     private final Map<Long, RoomDto> store = new HashMap<>();
+    private static Logger log = LoggerFactory.getLogger(RoomController.class);
 
     public record RoomDto(
             @NotBlank(message = "name is required")
@@ -34,6 +37,7 @@ public class RoomController {
 
     @GetMapping
     public List<RoomView> list() {
+        log.info("Getting list of rooms.");
         return store.entrySet().stream()
                 .map(e -> toView(e.getKey(), e.getValue()))
                 .toList();
@@ -42,7 +46,11 @@ public class RoomController {
     @GetMapping("/{id}")
     public RoomView get(@PathVariable Long id) {
         var dto = store.get(id);
-        if (dto == null) throw new ResourceNotFoundException("Room %d not found".formatted(id));
+        log.info("Trying to GET room with id {}.", id);
+        if (dto == null){
+            throw new ResourceNotFoundException("Room %d not found".formatted(id));
+        }
+        log.info("GET room with id {}", id);
         return toView(id, dto);
     }
 

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="WARN" monitorInterval="10" packages="ua.edu.ukma.kataskin.smarthomeproject.logging">
+    <Properties>
+        <Property name="layout">%d [%t] %-5level %logger - %m%n</Property>
+    </Properties>
     <Appenders>
         <Console name="ConsoleJSON" target="SYSTEM_OUT">
-            <PrettyJsonLayout charset="UTF-8"/>
+            <PatternLayout pattern="${layout}"/>
         </Console>
 
         <CustomFileAppender name="CustomFile" fileName="logs/audit.json" append="true">
