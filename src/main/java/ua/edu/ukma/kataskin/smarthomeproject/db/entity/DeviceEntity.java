@@ -27,11 +27,7 @@ public class DeviceEntity {
     private RoomEntity room;
 
     @ManyToMany
-    @JoinTable(
-            name = "device_group_links",
-            joinColumns = @JoinColumn(name = "device_id"),
-            inverseJoinColumns = @JoinColumn(name = "group_id")
-    )
+    @JoinTable(name = "device_group_links", joinColumns = @JoinColumn(name = "device_id"), inverseJoinColumns = @JoinColumn(name = "group_id"))
     private Set<GroupEntity> groups = new HashSet<>();
 
     public DeviceEntity() {
@@ -39,6 +35,10 @@ public class DeviceEntity {
 
     public UUID getId() {
         return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public String getName() {

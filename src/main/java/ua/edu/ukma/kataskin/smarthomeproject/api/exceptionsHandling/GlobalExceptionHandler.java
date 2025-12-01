@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+
     @ExceptionHandler(ResourceNotFoundException.class)
     ResponseEntity<String> notFound(ResourceNotFoundException ex, HttpServletRequest r) {
         log.warn("404 {} {} – {}", r.getMethod(), r.getRequestURI(), ex.getMessage());
@@ -45,6 +46,11 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.joining("; "));
         log.warn("400 {} {} – {}", r.getMethod(), r.getRequestURI(), errors);
         return ResponseEntity.badRequest().body("Validation failed: " + errors);
+    }
+
+    @ExceptionHandler(org.springframework.web.servlet.resource.NoResourceFoundException.class)
+    ResponseEntity<String> noResource(Exception ex, HttpServletRequest r) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found");
     }
 
     @ExceptionHandler(Exception.class)

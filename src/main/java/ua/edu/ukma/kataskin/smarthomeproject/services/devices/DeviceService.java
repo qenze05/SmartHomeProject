@@ -38,8 +38,7 @@ public class DeviceService implements DeviceControlService {
             DeviceRepository deviceRepository,
             RoomRepository roomRepository,
             GroupRepository groupRepository,
-            DeviceMapper deviceMapper
-    ) {
+            DeviceMapper deviceMapper) {
         this.deviceRepository = deviceRepository;
         this.roomRepository = roomRepository;
         this.groupRepository = groupRepository;
@@ -86,19 +85,17 @@ public class DeviceService implements DeviceControlService {
     @Override
     @Transactional
     public DeviceDTO createDevice(DeviceDTO deviceDTO) {
-        UUID id = UUID.randomUUID();
         DeviceDTO created;
 
-        //TODO: - Add factory initializer
+        // TODO: - Add factory initializer
         if (Objects.requireNonNull(deviceDTO.deviceType) == DeviceType.AIR_CONDITIONER) {
-            created = new AirConditionerDeviceDTO(id, deviceDTO.deviceType, deviceDTO.name);
+            created = new AirConditionerDeviceDTO(null, deviceDTO.deviceType, deviceDTO.name);
         } else {
-            created = new DeviceDTO(id, deviceDTO.deviceType, deviceDTO.name);
+            created = new DeviceDTO(null, deviceDTO.deviceType, deviceDTO.name);
         }
 
-        repo().save(deviceMapper.toEntity(created, roomRepository, groupRepository));
-        if (created.deviceType == null) throw new IllegalArgumentException("deviceType required");
-        return created;
+        DeviceEntity saved = repo().save(deviceMapper.toEntity(created, roomRepository, groupRepository));
+        return deviceMapper.toDto(saved);
     }
 
     @Override

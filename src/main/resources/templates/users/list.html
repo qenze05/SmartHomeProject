@@ -10,7 +10,7 @@
     <img th:src="@{/img/logo.svg}" alt="Logo" class="logo"/>
     <nav>
         <a th:href="@{/}">Пристрої</a>
-        <a th:href="@{/templates/users}">Користувачі</a>
+        <a th:href="@{/users}">Користувачі</a>
         <form th:action="@{/logout}" method="post" style="display:inline">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
             <button type="submit" class="linklike">Вийти</button>
