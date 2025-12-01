@@ -7,5 +7,6 @@ import java.util.Optional;
 
 public interface RoomRepository extends JpaRepository<RoomEntity, Long> {
     Optional<RoomEntity> findByNameIgnoreCase(String name);
+
     boolean existsByNameIgnoreCase(String name);
 }

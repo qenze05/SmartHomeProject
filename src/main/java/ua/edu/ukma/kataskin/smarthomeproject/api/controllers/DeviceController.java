@@ -1,4 +1,5 @@
 package ua.edu.ukma.kataskin.smarthomeproject.api.controllers;
+
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -26,6 +27,7 @@ public class DeviceController {
     public DeviceController(DeviceControlService deviceControlService) {
         this.deviceService = deviceControlService;
     }
+
     @PostMapping
     public ResponseEntity<DeviceDTO> create(@Valid @RequestBody DeviceDTO body) {
         log.info("Create DTO: type={}, name={}", body.deviceType, body.name);

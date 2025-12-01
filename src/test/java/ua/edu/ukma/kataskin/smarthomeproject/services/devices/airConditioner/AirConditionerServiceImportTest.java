@@ -21,7 +21,6 @@ class AirConditionerServiceImportTest {
 
     @Test
     void testServiceBeanCreation() {
-        // Verify that DefaultAirConditionerService is correctly loaded into context
         assertThat(airConditionerService).isNotNull();
         assertThat(airConditionerService).isInstanceOf(DefaultAirConditionerService.class);
     }

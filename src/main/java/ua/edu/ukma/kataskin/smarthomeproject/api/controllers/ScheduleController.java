@@ -21,8 +21,9 @@ public class ScheduleController {
 
     private final Map<Long, ScheduleDto> store = new HashMap<>();
 
-    public enum TargetType { ROOM, DEVICE }
-    public enum Action { ON, OFF, TOGGLE }
+    public enum TargetType {ROOM, DEVICE}
+
+    public enum Action {ON, OFF, TOGGLE}
 
     public record ScheduleDto(
             @NotNull TargetType targetType,
@@ -32,7 +33,8 @@ public class ScheduleController {
             @NotNull LocalTime endTime,
             @NotNull Action action,
             @NotBlank String timezone
-    ) {}
+    ) {
+    }
 
     public record ScheduleView(
             Long id,
@@ -43,7 +45,8 @@ public class ScheduleController {
             LocalTime endTime,
             Action action,
             String timezone
-    ) {}
+    ) {
+    }
 
 
     @GetMapping

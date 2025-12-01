@@ -50,8 +50,8 @@ public class DevicePageController {
 
     @PostMapping("/devices")
     public String create(@Valid @ModelAttribute("device") DeviceForm f,
-            BindingResult br,
-            RedirectAttributes ra) {
+                         BindingResult br,
+                         RedirectAttributes ra) {
         if (br.hasErrors()) {
             ra.addFlashAttribute("org.springframework.validation.BindingResult.device", br);
             ra.addFlashAttribute("device", f);
@@ -77,9 +77,9 @@ public class DevicePageController {
 
     @PostMapping("/devices/{id}")
     public String update(@PathVariable UUID id,
-            @Valid @ModelAttribute("device") DeviceForm f,
-            BindingResult br,
-            RedirectAttributes ra) {
+                         @Valid @ModelAttribute("device") DeviceForm f,
+                         BindingResult br,
+                         RedirectAttributes ra) {
         if (br.hasErrors()) {
             ra.addFlashAttribute("org.springframework.validation.BindingResult.device", br);
             ra.addFlashAttribute("device", f);

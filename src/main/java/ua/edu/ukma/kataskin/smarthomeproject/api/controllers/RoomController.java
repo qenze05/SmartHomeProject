@@ -29,11 +29,13 @@ public class RoomController {
             String name,
             String description,
             Set<String> deviceIds
-    ) {}
+    ) {
+    }
 
     public record RoomView(
             Long id, String name, String description, Set<String> deviceIds
-    ) {}
+    ) {
+    }
 
     @GetMapping
     public List<RoomView> list() {
@@ -47,7 +49,7 @@ public class RoomController {
     public RoomView get(@PathVariable Long id) {
         var dto = store.get(id);
         log.info("Trying to GET room with id {}.", id);
-        if (dto == null){
+        if (dto == null) {
             throw new ResourceNotFoundException("Room %d not found".formatted(id));
         }
         log.info("GET room with id {}", id);
@@ -84,7 +86,7 @@ public class RoomController {
         if (dto == null) throw new ResourceNotFoundException("Room %d not found".formatted(id));
         LinkedHashSet<String> set = dto.deviceIds() != null ? new LinkedHashSet<>(dto.deviceIds()) : new LinkedHashSet<>();
         set.remove(deviceId);
-        var updated = new RoomDto(dto.name(), dto.description(),  set);
+        var updated = new RoomDto(dto.name(), dto.description(), set);
         store.put(id, updated);
         return toView(id, updated);
     }

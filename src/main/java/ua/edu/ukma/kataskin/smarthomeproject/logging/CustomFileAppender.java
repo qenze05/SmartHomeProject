@@ -66,7 +66,10 @@ public class CustomFileAppender extends AbstractAppender {
     public void stop() {
         super.stop();
         if (out != null) {
-            try { out.close(); } catch (IOException ignored) {}
+            try {
+                out.close();
+            } catch (IOException ignored) {
+            }
         }
     }
 }

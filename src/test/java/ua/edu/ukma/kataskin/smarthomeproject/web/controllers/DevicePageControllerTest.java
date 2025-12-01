@@ -42,26 +42,22 @@ class DevicePageControllerTest {
     private JwtUtil jwtUtil;
 
     @Test
-    @WithMockUser(username = "testuser", roles = { "USER" })
+    @WithMockUser(username = "testuser", roles = {"USER"})
     void testDevicesPageReturnsCorrectView() throws Exception {
-        // Arrange
         DeviceDTO device = new DeviceDTO(UUID.randomUUID(), DeviceType.LIGHTS, "Test Device");
         when(deviceService.getAllDevices()).thenReturn(List.of(device));
 
-        // Act & Assert
         mockMvc.perform(get("/").with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("index"));
     }
 
     @Test
-    @WithMockUser(username = "testuser", roles = { "USER" })
+    @WithMockUser(username = "testuser", roles = {"USER"})
     void testDevicesPageContainsDeviceList() throws Exception {
-        // Arrange
         DeviceDTO device = new DeviceDTO(UUID.randomUUID(), DeviceType.LIGHTS, "Test Device");
         when(deviceService.getAllDevices()).thenReturn(List.of(device));
 
-        // Act & Assert
         mockMvc.perform(get("/").with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("devices"))

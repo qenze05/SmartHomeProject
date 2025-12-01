@@ -23,28 +23,22 @@ class DeviceIntegrationTest {
 
     @Test
     void testCreateAndRetrieveDevice() {
-        // Arrange
         DeviceDTO deviceToCreate = new DeviceDTO(null, DeviceType.LIGHTS, "Integration Test Device");
 
-        // Act - Create device
         DeviceDTO createdDevice = deviceService.createDevice(deviceToCreate);
 
-        // Assert - Verify creation
         assertThat(createdDevice).isNotNull();
-        assertThat(createdDevice.id).isNotNull(); // ID should be generated
+        assertThat(createdDevice.id).isNotNull();
         assertThat(createdDevice.name).isEqualTo("Integration Test Device");
         assertThat(createdDevice.deviceType).isEqualTo(DeviceType.LIGHTS);
 
-        // Act - Retrieve device
         DeviceDTO retrievedDevice = deviceService.getDeviceById(createdDevice.id);
 
-        // Assert - Verify retrieval
         assertThat(retrievedDevice).isNotNull();
         assertThat(retrievedDevice.id).isEqualTo(createdDevice.id);
         assertThat(retrievedDevice.name).isEqualTo("Integration Test Device");
         assertThat(retrievedDevice.deviceType).isEqualTo(DeviceType.LIGHTS);
 
-        // Verify it exists in repository
         assertThat(deviceRepository.findById(createdDevice.id)).isPresent();
     }
 }

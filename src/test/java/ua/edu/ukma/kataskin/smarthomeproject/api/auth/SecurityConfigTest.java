@@ -18,14 +18,14 @@ class SecurityConfigTest {
     private MockMvc mockMvc;
 
     @Test
-    @WithMockUser(username = "owner", roles = { "OWNER" })
+    @WithMockUser(username = "owner", roles = {"OWNER"})
     void testOwnerCanAccessUsersPage() throws Exception {
         mockMvc.perform(get("/users"))
                 .andExpect(status().isOk());
     }
 
     @Test
-    @WithMockUser(username = "user", roles = { "USER" })
+    @WithMockUser(username = "user", roles = {"USER"})
     void testUserCannotAccessUsersPage() throws Exception {
         mockMvc.perform(get("/users"))
                 .andExpect(status().isForbidden());

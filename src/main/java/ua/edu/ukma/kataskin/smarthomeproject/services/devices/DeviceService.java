@@ -76,6 +76,7 @@ public class DeviceService implements DeviceControlService {
 
     @Override
     @Transactional
+    @org.springframework.cache.annotation.CacheEvict(value = "devices", allEntries = true)
     public DeviceDTO updateDevice(UUID id, DeviceDTO updated) {
         DeviceDTO updatedDeviceDTO = new DeviceDTO(id, updated.deviceType, updated.name);
         repo().save(deviceMapper.toEntity(updatedDeviceDTO, roomRepository, groupRepository));
@@ -84,6 +85,7 @@ public class DeviceService implements DeviceControlService {
 
     @Override
     @Transactional
+    @org.springframework.cache.annotation.CacheEvict(value = "devices", allEntries = true)
     public DeviceDTO createDevice(DeviceDTO deviceDTO) {
         DeviceDTO created;
 
@@ -111,6 +113,7 @@ public class DeviceService implements DeviceControlService {
 
     @Override
     @Transactional(readOnly = true)
+    @org.springframework.cache.annotation.Cacheable("devices")
     public List<DeviceDTO> getAllDevices() {
         List<DeviceEntity> entities = repo().findAll();
         log.info("GET /api/devices");
@@ -119,6 +122,7 @@ public class DeviceService implements DeviceControlService {
 
     @Override
     @Transactional
+    @org.springframework.cache.annotation.CacheEvict(value = "devices", allEntries = true)
     public DeviceDTO deleteDevice(UUID id) {
         DeviceEntity entity = repo().findById(id).orElseThrow();
         repo().delete(entity);
