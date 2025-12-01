@@ -1,5 +1,6 @@
 package ua.edu.ukma.kataskin.smarthomeproject.logging;
 
+import org.apache.logging.log4j.ThreadContext;
 import org.apache.logging.log4j.core.Layout;
 import org.apache.logging.log4j.core.LogEvent;
 import org.apache.logging.log4j.core.layout.AbstractStringLayout;
@@ -14,7 +15,7 @@ import java.util.StringJoiner;
 @Plugin(name = "PrettyJsonLayout", category = "Core", elementType = Layout.ELEMENT_TYPE, printObject = true)
 public class PrettyJsonLayout extends AbstractStringLayout {
 
-    protected PrettyJsonLayout(Charset charset) {
+    public PrettyJsonLayout(Charset charset) {
         super(charset);
     }
 
@@ -29,17 +30,16 @@ public class PrettyJsonLayout extends AbstractStringLayout {
     public String toSerializable(LogEvent event) {
         String ts = Instant.ofEpochMilli(event.getTimeMillis()).toString();
         String marker = event.getMarker() != null ? event.getMarker().getName() : null;
-
-        // ThreadContext (MDC) як JSON
+        ThreadContext.clearAll();
         StringJoiner mdcPairs = new StringJoiner(",", "{", "}");
         for (Map.Entry<String, String> e : event.getContextData().toMap().entrySet()) {
             mdcPairs.add(jsonKV(e.getKey(), e.getValue()));
         }
-        if (mdcPairs.length() == 2) mdcPairs = new StringJoiner("", "", ""); // порожній {}
+        if (mdcPairs.length() == 2) mdcPairs = new StringJoiner("", "", "");
 
         StringBuilder sb = new StringBuilder(256);
         sb.append("{")
-                .append(jsonKV("ts", ts)).append(",")
+                .append(jsonKV("date", ts)).append(",")
                 .append(jsonKV("level", event.getLevel().name())).append(",")
                 .append(jsonKV("thread", event.getThreadName())).append(",")
                 .append(jsonKV("logger", event.getLoggerName())).append(",");
@@ -61,13 +61,14 @@ public class PrettyJsonLayout extends AbstractStringLayout {
     }
 
     private static String jsonKV(String k, String v) {
-        return "\"" + escape(k) + "\":\"" + escape(v) + "\"";
+        ThreadContext.put(k, v);
+        return "\"" + ThreadContext.get(k) + "\"";
     }
 
-    private static String escape(String s) {
-        if (s == null) return "";
-        return s.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n");
-    }
+//    private static String escape(String s) {
+//        if (s == null) return "";
+//        return s.replace("\\", "\\\\").replace("\"", "\\\"").replace("\n", "\\n");
+//    }
 
     @Override
     public String getContentType() {

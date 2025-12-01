@@ -28,6 +28,9 @@ public class AuthController {
         } else if ("user".equals(username) && "user123".equals(password)) {
             String token = jwtUtil.generateToken(username, "USER");
             return Map.of("token", token);
+        } else if ("owner".equals(username) && "owner123".equals(password)){
+            String token = jwtUtil.generateToken(username, "OWNER");
+            return Map.of("token", token);
         }
         return Map.of("error", "Invalid credentials");
     }

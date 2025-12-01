@@ -18,7 +18,7 @@ import java.util.List;
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
-    private final JwtUtil jwtUtil;
+    private JwtUtil jwtUtil;
 
     public JwtAuthFilter(JwtUtil jwtUtil) {
         this.jwtUtil = jwtUtil;
@@ -37,7 +37,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
             if (jwtUtil.validateToken(token)) {
                 String username = jwtUtil.extractUsername(token);
-                String role = jwtUtil.extractRole(token); // e.g. ADMIN / USER / OWNER
+                String role = jwtUtil.extractRole(token); // ADMIN / USER / OWNER
                 if (username != null && role != null) {
                     List<GrantedAuthority> auths = List.of(new SimpleGrantedAuthority("ROLE_" + role));
 
