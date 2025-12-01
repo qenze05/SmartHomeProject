@@ -63,6 +63,7 @@ public class SecurityConfig {
                 http
                                 .authorizeHttpRequests(reg -> reg
                                                 .requestMatchers("/signin", "/css/**", "/js/**", "/img/**").permitAll()
+                                                .requestMatchers("/users/**").hasRole("OWNER")
                                                 .anyRequest().authenticated())
                                 .csrf(Customizer.withDefaults())
                                 .formLogin(fl -> fl
