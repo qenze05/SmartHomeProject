@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ua.edu.ukma.kataskin.smarthomeproject.aop.annotations.HandleExceptions;
 import ua.edu.ukma.kataskin.smarthomeproject.api.controllers.DeviceController;
 import ua.edu.ukma.kataskin.smarthomeproject.api.exceptionsHandling.exceptions.ResourceNotFoundException;
 import ua.edu.ukma.kataskin.smarthomeproject.api.exceptionsHandling.exceptions.WrongDeviceTypeException;
@@ -18,9 +19,9 @@ import ua.edu.ukma.kataskin.smarthomeproject.dtos.api.device.AirConditionerDevic
 import ua.edu.ukma.kataskin.smarthomeproject.dtos.api.device.DeviceDTO;
 import ua.edu.ukma.kataskin.smarthomeproject.dtos.api.device.DeviceType;
 import ua.edu.ukma.kataskin.smarthomeproject.services.devices.airConditioner.DefaultAirConditionerService;
-
 import java.util.*;
 
+@HandleExceptions(rethrow = true)
 @Service
 @Primary
 public class DeviceService implements DeviceControlService {

@@ -8,10 +8,13 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ua.edu.ukma.kataskin.smarthomeproject.aop.annotations.DeviceActionAudit;
+import ua.edu.ukma.kataskin.smarthomeproject.aop.annotations.RateLimited;
 import ua.edu.ukma.kataskin.smarthomeproject.api.exceptionsHandling.exceptions.ResourceNotFoundException;
 import ua.edu.ukma.kataskin.smarthomeproject.dtos.api.device.AirConditionerDeviceDTO;
 import ua.edu.ukma.kataskin.smarthomeproject.dtos.api.device.DeviceDTO;
 import ua.edu.ukma.kataskin.smarthomeproject.services.devices.DeviceControlService;
+import ua.edu.ukma.kataskin.smarthomeproject.aop.audit.DeviceActionAuditAspect;
 
 import java.net.URI;
 import java.util.*;
@@ -72,6 +75,8 @@ public class DeviceController {
         return deviceService.updateDevice(id, body);
     }
 
+    @DeviceActionAudit(action = "TURN_ON_DEVICE")
+    @RateLimited(maxCallsPerMinute = 10)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
         DeviceDTO removed = deviceService.deleteDevice(id);
