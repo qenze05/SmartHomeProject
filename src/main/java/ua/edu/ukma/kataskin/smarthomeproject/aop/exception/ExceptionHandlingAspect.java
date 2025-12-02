@@ -28,7 +28,6 @@ public class ExceptionHandlingAspect {
         try {
             return pjp.proceed();
         } catch (Throwable ex) {
-            // тут твоя "дія": логування / запис у файл / нотифікація і т.п.
             log.error("Exception in {} with args {}: {}",
                     signature.toShortString(),
                     Arrays.toString(pjp.getArgs()),
@@ -36,12 +35,10 @@ public class ExceptionHandlingAspect {
                     ex
             );
 
-            // місце, де можна, наприклад, відправити email/telegram/whatever
 
             if (annotation == null || annotation.rethrow()) {
-                throw ex; // даємо помилці піти далі
+                throw ex;
             } else {
-                // можна повернути null або якось по-іншому обробити
                 return null;
             }
         }

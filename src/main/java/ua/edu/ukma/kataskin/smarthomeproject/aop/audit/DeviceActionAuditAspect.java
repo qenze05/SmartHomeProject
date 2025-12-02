@@ -41,7 +41,6 @@ public class DeviceActionAuditAspect {
                 result
         );
 
-        // тут можна додатково записувати в окрему audit-таблицю в БД
     }
 
     private String resolveUserId() {

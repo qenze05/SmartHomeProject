@@ -34,11 +34,8 @@ public class RateLimitAspect {
         int maxCalls = annotation.maxCallsPerMinute();
         String userId = resolveUserId();
 
-        // якщо юзера не можемо визначити, можна:
-        // а) пропускати (return pjp.proceed())
-        // б) вважати усі виклики одним "анонімним" юзером
+
         if (userId == null) {
-            // варіант: не лімітуємо анонімів
             return pjp.proceed();
         }
 
@@ -47,7 +44,6 @@ public class RateLimitAspect {
 
         synchronized (info) {
             if (now - info.windowStart >= WINDOW_MS) {
-                // нове вікно
                 info.windowStart = now;
                 info.calls = 0;
             }
@@ -66,10 +62,9 @@ public class RateLimitAspect {
     }
 
     private String resolveUserId() {
-        // якщо в тебе вже є Spring Security:
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated()) {
-            return auth.getName(); // username як userId
+            return auth.getName();
         }
         return null;
     }
