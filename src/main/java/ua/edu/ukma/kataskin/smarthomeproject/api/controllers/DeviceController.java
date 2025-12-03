@@ -75,7 +75,7 @@ public class DeviceController {
         return deviceService.updateDevice(id, body);
     }
 
-    @DeviceActionAudit(action = "TURN_ON_DEVICE")
+    @DeviceActionAudit(action = "DELETE_DEVICE")
     @RateLimited(maxCallsPerMinute = 10)
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable UUID id) {
